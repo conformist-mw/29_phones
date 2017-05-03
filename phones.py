@@ -17,7 +17,6 @@ def run_query(f, attempts=3):
             except DBAPIError:
                 continue
         else:
-            print('why i"m here')
             session.rollback()
     return wrapper
 
