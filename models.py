@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String
+from config import DB_URI
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, create_engine
 
 base_class = declarative_base()
 
@@ -15,3 +17,14 @@ class Orders(base_class):
     confirmed = Column(String)
     comment = Column(String)
     price = Column(String)
+
+
+def get_session():
+    engine = create_engine(DB_URI)
+    session_class = sessionmaker(engine)
+    return session_class()
+
+
+if __name__ == '__main__':
+    engine = create_engine(DB_URI)
+    base_class.metadata.create_all(engine)
