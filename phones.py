@@ -1,11 +1,11 @@
 import re
 from sqlalchemy.exc import DBAPIError
 from models import get_session, Orders
-match = re.compile(r'\D')
+non_digits = re.compile(r'\D')
 
 
 def remove_non_digit(raw_number):
-    number = match.sub('', raw_number)
+    number = non_digits.sub('', raw_number)
     return number[-10:] if len(number) > 10 else number
 
 
@@ -23,7 +23,7 @@ def run_query(f, attempts=3):
 
 @run_query
 def query():
-    for order in session.query(Orders):
+    for order in session.query(Orders).filter(Orders.fmt_phone.is_(None)):
         number = remove_non_digit(order.contact_phone)
         order.fmt_phone = number
 
